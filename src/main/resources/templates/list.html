@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="uk" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Список нотаток</title>
+</head>
+
+<body>
+<p><a href="/note/create">Create new</a></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th><b>Ім'я</b></th>
+        <th><b>Вміст</b></th>
+        <th><b>Доступ</b></th>
+        <th><b>Дії</b></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="note : ${notes}">
+        <td th:text="${note.title}"></td>
+        <td th:text="${note.content}"></td>
+        <td th:text="${note.accessType.getTypeValue()}"></td>
+        <td>
+            <div style="display: flex; flex-direction: row;">
+                <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
+                    <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
+                    <input type="submit" value="Delete">
+                </form>
+                <form action="#" th:action="@{/note/edit}" th:object="${noteToEdit}" method="POST">
+                    <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
+                    <input type="submit" value="Edit">
+                </form>
+                <a th:href="@{'/note/share/' + ${note.id}}">Share</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

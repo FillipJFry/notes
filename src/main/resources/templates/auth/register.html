@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="uk" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Реєстрація</title>
+</head>
+
+<body>
+<h1>Реєстрація</h1>
+<p th:if="${regError}" th:text="${regErrorMsg}"></p>
+<form method="post" action="/login">
+    <p><label for="username">Логін</label></p>
+    <p><input id="username" type="text" name="username" placeholder="Ваш логін"></p>
+    <p><label for="password">Пароль</label></p>
+    <p><input id="password" type="password" name="password" placeholder="Ваш пароль"></p>
+    <p><button type="submit">Зареєструватись</button></p>
+</form>
+</body>
+</html>

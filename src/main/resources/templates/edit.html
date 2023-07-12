@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="uk" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit a note</title>
+</head>
+
+<body>
+<form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
+    <p>ID:</p>
+    <p><input type="text" field="*{id}" name="id"
+              th:value="${existing_note.id}" autocomplete="off" readonly></p>
+    <p>Title:</p>
+    <p><input type="text" field="*{title}" name="title"
+              th:value="${existing_note.title}" autocomplete="off"></p>
+    <p>Content:</p>
+    <p><input type="text" field="*{content}" name="content"
+              th:value="${existing_note.content}" autocomplete="off"></p>
+    <p>Access type:</p>
+    <p>
+    <div th:each="accessTypeItem : ${T(com.goit.letscode.notes.AccessType).values()}">
+        <div style="display: flex; flex-direction: row;">
+            <input type="radio" field="*{accessType}" name="accessType" th:value="${accessTypeItem}"
+                   th:checked="${existing_note.accessType} == ${accessTypeItem}"></p>
+            <label th:for="${#ids.next('accessType')}"
+                   th:text="${accessTypeItem.getTypeValue()}">model</label>
+        </div>
+    </div>
+    <p><input type="submit" value="Зберегти"></p>
+</form>
+<p><a href="/note/list">Скасувати</a></p>
+</body>
+</html>
