@@ -26,13 +26,15 @@
             <div style="display: flex; flex-direction: row;">
                 <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
                     <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
-                    <input type="submit" value="Delete">
+                    <input type="image" name="submit" src="/img/trashbox.svg" alt="Delete" width="24">
                 </form>
                 <form action="#" th:action="@{/note/edit}" th:object="${noteToEdit}" method="POST">
                     <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
-                    <input type="submit" value="Edit">
+                    <input type="image" name="submit" src="/img/edit.svg" alt="Edit" width="24">
                 </form>
-                <a th:href="@{'/note/share/' + ${note.id}}">Share</a>
+                <a th:href="@{'/note/share/' + ${note.id}}">
+                    <img src="/img/link.svg" width="24" />
+                </a>
             </div>
         </td>
     </tr>
