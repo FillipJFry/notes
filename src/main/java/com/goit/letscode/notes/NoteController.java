@@ -1,5 +1,6 @@
 package com.goit.letscode.notes;
 
+import com.goit.letscode.notes.noteDTO.NoteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +27,7 @@ public class NoteController {
     public ModelAndView share(@PathVariable(value = "id", required = false) Long id) {
 
         ModelAndView result = new ModelAndView("share");
-        Note note = srv.getById(id);
+        NoteDTO note = srv.getById(id);
         result.addObject("noteTitle", note.getTitle());
         result.addObject("noteContent", note.getContent());
         return result;
@@ -36,13 +37,13 @@ public class NoteController {
     public ModelAndView create() {
 
         ModelAndView result = new ModelAndView("edit");
-        Note note = srv.create();
+        NoteDTO note = srv.create();
         result.addObject("existing_note", note);
         return result;
     }
 
     @PostMapping("/edit")
-    public ModelAndView edit(@ModelAttribute Note note) {
+    public ModelAndView edit(@ModelAttribute NoteDTO note) {
 
         ModelAndView result = new ModelAndView("edit");
         note = srv.getById(note.getId());
@@ -53,7 +54,7 @@ public class NoteController {
     @PostMapping("/save")
     public String save(@ModelAttribute Note note) {
 
-        srv.save(note);
+        srv.save(NoteDTO.fromNote(note));
         return "redirect:/note/list";
     }
 

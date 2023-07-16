@@ -1,9 +1,11 @@
 package com.goit.letscode.notes;
 
+import com.goit.letscode.notes.noteDTO.NoteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
@@ -12,18 +14,24 @@ public class NoteService {
     @Autowired
     private NoteRepository repository;
 
-    public Note create() {
-
-        return new Note(EMPTY_ID, "", "", AccessType.PRIVATE);
+    public NoteDTO create() {
+        return NoteDTO.builder()
+                .id(EMPTY_ID)
+                .title("")
+                .content("")
+                .accessType(AccessType.PRIVATE)
+                .build();
     }
 
-    public List<Note> listAll() {
-
-        return repository.findAll();
+    public List<NoteDTO> listAll() {
+        List<Note> notes = repository.findAll();
+        return notes.stream()
+                .map(NoteDTO::fromNote)
+                .collect(Collectors.toList());
     }
 
-    public void save(Note note) {
-
+    public void save(NoteDTO noteDTO) {
+        Note note = NoteDTO.fromDto(noteDTO);
         repository.save(note);
     }
 
@@ -32,10 +40,9 @@ public class NoteService {
         repository.deleteById(id);
     }
 
-    public Note getById(Long id) {
-
+    public NoteDTO getById(Long id) {
         if (id != null && repository.existsById(id)) {
-            return repository.findById(id).orElse(create());
+            return NoteDTO.fromNote(repository.findById(id).orElse(NoteDTO.fromDto(create())));
         }
         return create();
     }
