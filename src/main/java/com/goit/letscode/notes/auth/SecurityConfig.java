@@ -3,15 +3,16 @@ package com.goit.letscode.notes.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 import javax.sql.DataSource;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -23,16 +24,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-        // TODO: adjust the httpSecurity properly
-        httpSecurity.authorizeHttpRequests()
+        httpSecurity.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        new RegexRequestMatcher("/login", null)).permitAll()
+                .and()
+                .authorizeHttpRequests()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                //.loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
+                .loginPage("/login")
+                .loginProcessingUrl("/off")
+                .defaultSuccessUrl("/note/list", true);
         return httpSecurity.build();
     }
 
@@ -48,5 +51,12 @@ public class SecurityConfig {
                 .authoritiesByUsernameQuery("SELECT login, 'USER' as authority "
                         + "FROM users "
                         + "WHERE login = ?");
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
