@@ -8,9 +8,8 @@
 
 <body>
 <form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
-    <p hidden="hidden">ID:</p>
-    <p><input type="hidden" field="*{id}" name="id"
-              th:value="${existing_note.id}" autocomplete="off" readonly></p>
+    <input type="hidden" field="*{id}" name="id"
+              th:value="${existing_note.id}" autocomplete="off" readonly>
     <p>Title:</p>
     <p><input type="text" field="*{title}" name="title"
               th:value="${existing_note.title}" autocomplete="off"></p>
