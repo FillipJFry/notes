@@ -20,7 +20,7 @@ public class NoteController {
         ModelAndView result = new ModelAndView("hash");
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        String pwdHash = encoder.encode("jdbcDefault");
+        String pwdHash = encoder.encode("123");
         result.addObject("pwdHash", pwdHash);
         return result;
     }
