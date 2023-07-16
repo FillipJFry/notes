@@ -17,12 +17,18 @@ import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.InputMismatchException;
+
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller
 @RequestMapping("/")
 public class AuthController {
 
+    private static final int MIN_LOGIN_LEN = 4;
+    private static final int MAX_LOGIN_LEN = 50;
+    private static final int MIN_PWD_LEN = 3;
+    private static final int MAX_PWD_LEN = 100;
     @Autowired
     private AuthenticationManager authManager;
 
@@ -33,10 +39,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String processLogin(@ModelAttribute AuthDTO authData, HttpServletRequest request) {
+    public ModelAndView processLogin(@ModelAttribute AuthDTO authData, HttpServletRequest request) {
 
-        //String errMsg = null;
+        String errorMsg;
         try {
+            validateAuthData(authData);
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authData.getLogin(),
@@ -46,18 +53,42 @@ public class AuthController {
             securityContext.setAuthentication(authentication);
             request.getSession(true).setAttribute(SPRING_SECURITY_CONTEXT_KEY,
                                                         securityContext);
-            return "redirect:/note/list";
+            return new ModelAndView("redirect:/note/list");
 
-        } catch (Exception ignored) {
-
+        } catch (UsernameNotFoundException e) {
+            errorMsg = "Користувач із таким іменем не зареєстрований";
+        } catch (BadCredentialsException e) {
+            errorMsg = "Невірний пароль";
+        } catch (Exception e) {
+            errorMsg = e.getMessage();
         }
 
-        return "redirect:/login";
+        ModelAndView result = new ModelAndView("auth/login");
+        result.addObject("regErrorMsg", errorMsg);
+        return result;
     }
 
     //@GetMapping("/register")
     public ModelAndView register() {
 
         return new ModelAndView("auth/register");
+    }
+
+    private void validateAuthData(AuthDTO authData) throws InputMismatchException {
+
+        assert authData != null;
+        String login = authData.getLogin();
+        if (login.isEmpty()) {
+            throw new InputMismatchException("Імя користувача не може бути порожнім");
+        }
+        if (login.length() < MIN_LOGIN_LEN || login.length() > MAX_LOGIN_LEN) {
+            throw new InputMismatchException("Довжина імені користувача має бути від "
+                                        + MIN_LOGIN_LEN + " до " + MAX_LOGIN_LEN + " симв.");
+        }
+        String password = authData.getPassword();
+        if (password.length() < MIN_PWD_LEN || password.length() > MAX_PWD_LEN) {
+            throw new InputMismatchException("Довжина паролю має бути від "
+                                        + MIN_PWD_LEN + " до " + MAX_PWD_LEN + " симв.");
+        }
     }
 }

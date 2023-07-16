@@ -8,6 +8,7 @@
 
 <body>
 <h1>Вхід</h1>
+<p th:if="${regErrorMsg}" th:text="${regErrorMsg}" style="color: red;"></p>
 <form method="POST" action="/login">
     <p><label for="login">Логін</label></p>
     <p><input id="login" type="text" name="login" placeholder="Ваш логін"></p>
