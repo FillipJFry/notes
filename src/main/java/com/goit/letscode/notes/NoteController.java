@@ -14,17 +14,6 @@ public class NoteController {
     @Autowired
     private NoteService srv;
 
-    @GetMapping("/pwd")
-    public ModelAndView showPwdHash() {
-
-        ModelAndView result = new ModelAndView("hash");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        String pwdHash = encoder.encode("123");
-        result.addObject("pwdHash", pwdHash);
-        return result;
-    }
-
     @GetMapping("/list")
     public ModelAndView getList(Authentication authentication) {
 
@@ -74,5 +63,16 @@ public class NoteController {
         assert noteToDel != null;
         srv.deleteById(noteToDel.getId());
         return "redirect:/note/list";
+    }
+
+    @GetMapping("/pwd")
+    public ModelAndView showPwdHash() {
+
+        ModelAndView result = new ModelAndView("hash");
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String pwdHash = encoder.encode("123");
+        result.addObject("pwdHash", pwdHash);
+        return result;
     }
 }
