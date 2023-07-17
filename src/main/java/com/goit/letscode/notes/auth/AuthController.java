@@ -31,6 +31,8 @@ public class AuthController {
     private static final int MAX_PWD_LEN = 100;
     @Autowired
     private AuthenticationManager authManager;
+    @Autowired
+    private UserRepository repository;
 
     @GetMapping("/login")
     public String gotoLogin() {
@@ -69,18 +71,22 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public ModelAndView register() {
+    public String register() {
 
-        return new ModelAndView("auth/register");
+        return "auth/register";
     }
 
     @PostMapping("/register")
-    public ModelAndView processRegister(@ModelAttribute AuthDTO authData, HttpServletRequest request) {
-        String errorMsg = "Створено нового користувача - "+authData.getLogin();
-        String model = "auth/login";
+    public ModelAndView processRegister(@ModelAttribute AuthDTO authData) {
 
+        String model = "auth/login";
+        String errorMsg;
         try {
             validateAuthData(authData);
+            // FIXME: hash the password before saving it in the DB
+            repository.save(new User(authData.getLogin(), authData.getPassword()));
+            errorMsg = "Створено нового користувача - " + authData.getLogin();
+
         } catch (Exception e) {
             errorMsg = e.getMessage();
             model = "auth/register";
@@ -89,10 +95,7 @@ public class AuthController {
         ModelAndView result = new ModelAndView(model);
         result.addObject("regErrorMsg", errorMsg);
         return result;
-
     }
-
-
 
     private void validateAuthData(AuthDTO authData) throws InputMismatchException {
 
