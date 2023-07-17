@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
@@ -12,19 +13,22 @@ public class NoteService {
     @Autowired
     private NoteRepository repository;
 
-    public Note create() {
+    public NoteDTO create() {
 
-        return new Note(EMPTY_ID, "", "", AccessType.PRIVATE);
+        return new NoteDTO(createEmptyNote());
     }
 
-    public List<Note> listAll() {
+    public List<NoteDTO> listAll() {
 
-        return repository.findAll();
+        List<Note> notes = repository.findAll();
+        return notes.stream()
+                .map(NoteDTO::new)
+                .collect(Collectors.toList());
     }
 
-    public void save(Note note) {
+    public void save(NoteDTO noteDTO) {
 
-        repository.save(note);
+        repository.save(noteDTO.toNote());
     }
 
     public void deleteById(long id) {
@@ -32,11 +36,21 @@ public class NoteService {
         repository.deleteById(id);
     }
 
-    public Note getById(Long id) {
+    public NoteDTO getById(Long id) {
 
         if (id != null && repository.existsById(id)) {
-            return repository.findById(id).orElse(create());
+            return new NoteDTO(repository.findById(id).orElse(createEmptyNote()));
         }
         return create();
+    }
+
+    private Note createEmptyNote() {
+
+        return Note.builder()
+                .id(EMPTY_ID)
+                .title("")
+                .content("")
+                .accessType(AccessType.PRIVATE)
+                .build();
     }
 }
