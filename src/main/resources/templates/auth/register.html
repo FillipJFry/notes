@@ -8,13 +8,14 @@
 
 <body>
 <h1>Реєстрація</h1>
-<p th:if="${regError}" th:text="${regErrorMsg}"></p>
-<form method="post" action="/login">
-    <p><label for="username">Логін</label></p>
-    <p><input id="username" type="text" name="username" placeholder="Ваш логін"></p>
+<p th:if="${regErrorMsg}" th:text="${regErrorMsg}" style="color: red;"></p>
+<form method="post" action="/register">
+    <p><label for="login">Логін</label></p>
+    <p><input id="login" type="text" name="login" placeholder="Ваш логін"></p>
     <p><label for="password">Пароль</label></p>
     <p><input id="password" type="password" name="password" placeholder="Ваш пароль"></p>
     <p><button type="submit">Зареєструватись</button></p>
+    <p><a href="/login">Назад</a></p>
 </form>
 </body>
 </html>

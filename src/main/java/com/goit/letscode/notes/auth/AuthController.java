@@ -68,11 +68,31 @@ public class AuthController {
         return result;
     }
 
-    //@GetMapping("/register")
+    @GetMapping("/register")
     public ModelAndView register() {
 
         return new ModelAndView("auth/register");
     }
+
+    @PostMapping("/register")
+    public ModelAndView processRegister(@ModelAttribute AuthDTO authData, HttpServletRequest request) {
+        String errorMsg = "Створено нового користувача - "+authData.getLogin();
+        String model = "auth/login";
+
+        try {
+            validateAuthData(authData);
+        } catch (Exception e) {
+            errorMsg = e.getMessage();
+            model = "auth/register";
+        }
+
+        ModelAndView result = new ModelAndView(model);
+        result.addObject("regErrorMsg", errorMsg);
+        return result;
+
+    }
+
+
 
     private void validateAuthData(AuthDTO authData) throws InputMismatchException {
 
