@@ -1,6 +1,5 @@
 package com.goit.letscode.notes;
 
-import com.goit.letscode.notes.noteDTO.NoteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,14 +51,14 @@ public class NoteController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Note note) {
+    public String save(@ModelAttribute NoteDTO note) {
 
-        srv.save(NoteDTO.fromNote(note));
+        srv.save(note);
         return "redirect:/note/list";
     }
 
     @PostMapping("/delete")
-    public String delete(@ModelAttribute Note noteToDel) {
+    public String delete(@ModelAttribute NoteDTO noteToDel) {
 
         assert noteToDel != null;
         srv.deleteById(noteToDel.getId());

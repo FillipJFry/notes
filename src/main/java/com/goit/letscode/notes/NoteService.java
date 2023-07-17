@@ -1,6 +1,5 @@
 package com.goit.letscode.notes;
 
-import com.goit.letscode.notes.noteDTO.NoteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +14,21 @@ public class NoteService {
     private NoteRepository repository;
 
     public NoteDTO create() {
-        return NoteDTO.builder()
-                .id(EMPTY_ID)
-                .title("")
-                .content("")
-                .accessType(AccessType.PRIVATE)
-                .build();
+
+        return new NoteDTO(createEmptyNote());
     }
 
     public List<NoteDTO> listAll() {
+
         List<Note> notes = repository.findAll();
         return notes.stream()
-                .map(NoteDTO::fromNote)
+                .map(NoteDTO::new)
                 .collect(Collectors.toList());
     }
 
     public void save(NoteDTO noteDTO) {
-        Note note = NoteDTO.fromDto(noteDTO);
-        repository.save(note);
+
+        repository.save(noteDTO.toNote());
     }
 
     public void deleteById(long id) {
@@ -41,9 +37,20 @@ public class NoteService {
     }
 
     public NoteDTO getById(Long id) {
+
         if (id != null && repository.existsById(id)) {
-            return NoteDTO.fromNote(repository.findById(id).orElse(NoteDTO.fromDto(create())));
+            return new NoteDTO(repository.findById(id).orElse(createEmptyNote()));
         }
         return create();
+    }
+
+    private Note createEmptyNote() {
+
+        return Note.builder()
+                .id(EMPTY_ID)
+                .title("")
+                .content("")
+                .accessType(AccessType.PRIVATE)
+                .build();
     }
 }
