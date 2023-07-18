@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,6 +34,9 @@ public class AuthController {
     private AuthenticationManager authManager;
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @GetMapping("/login")
     public String gotoLogin() {
@@ -83,10 +87,9 @@ public class AuthController {
         String errorMsg;
         try {
             validateAuthData(authData);
-            // FIXME: hash the password before saving it in the DB
             repository.save(User.builder()
                             .login(authData.getLogin())
-                            .password(authData.getPassword())
+                            .password(passwordEncoder.encode(authData.getPassword()))
                             .build());
             errorMsg = "Створено нового користувача - " + authData.getLogin();
 
