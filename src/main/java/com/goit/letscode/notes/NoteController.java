@@ -66,10 +66,9 @@ public class NoteController {
     }
 
     @GetMapping("/pwd")
-    public ModelAndView showPwdHash() {
+    public ModelAndView showPwdHash(BCryptPasswordEncoder encoder) {
 
         ModelAndView result = new ModelAndView("hash");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         String pwdHash = encoder.encode("123");
         result.addObject("pwdHash", pwdHash);
