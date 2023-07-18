@@ -18,7 +18,8 @@ public class NoteController {
     public ModelAndView getList(Authentication authentication) {
 
         ModelAndView result = new ModelAndView("list");
-        result.addObject("notes", srv.listAll());
+        result.addObject("notes",
+                            srv.listAllForUser(authentication.getName()));
         return result;
     }
 
@@ -51,9 +52,9 @@ public class NoteController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute NoteDTO note) {
+    public String save(@ModelAttribute NoteDTO note, Authentication authentication) {
 
-        srv.save(note);
+        srv.save(note, authentication.getName());
         return "redirect:/note/list";
     }
 

@@ -1,5 +1,7 @@
 package com.goit.letscode.notes;
 
+import com.goit.letscode.notes.auth.User;
+import com.goit.letscode.notes.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,35 +13,39 @@ public class NoteService {
 
     private static final long EMPTY_ID = -1;
     @Autowired
-    private NoteRepository repository;
+    private NoteRepository notesRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public NoteDTO create() {
 
         return new NoteDTO(createEmptyNote());
     }
 
-    public List<NoteDTO> listAll() {
+    public List<NoteDTO> listAllForUser(String userLogin) {
 
-        List<Note> notes = repository.findAll();
+        User currentUser = userRepository.findByLogin(userLogin).orElseThrow();
+        List<Note> notes = currentUser.getNotes();
         return notes.stream()
                 .map(NoteDTO::new)
                 .collect(Collectors.toList());
     }
 
-    public void save(NoteDTO noteDTO) {
+    public void save(NoteDTO noteDTO, String userLogin) {
 
-        repository.save(noteDTO.toNote());
+        User currentUser = userRepository.findByLogin(userLogin).orElseThrow();
+        notesRepository.save(noteDTO.toNote(currentUser));
     }
 
     public void deleteById(long id) {
 
-        repository.deleteById(id);
+        notesRepository.deleteById(id);
     }
 
     public NoteDTO getById(Long id) {
 
-        if (id != null && repository.existsById(id)) {
-            return new NoteDTO(repository.findById(id).orElse(createEmptyNote()));
+        if (id != null && notesRepository.existsById(id)) {
+            return new NoteDTO(notesRepository.findById(id).orElse(createEmptyNote()));
         }
         return create();
     }

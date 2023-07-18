@@ -84,7 +84,10 @@ public class AuthController {
         try {
             validateAuthData(authData);
             // FIXME: hash the password before saving it in the DB
-            repository.save(new User(authData.getLogin(), authData.getPassword()));
+            repository.save(User.builder()
+                            .login(authData.getLogin())
+                            .password(authData.getPassword())
+                            .build());
             errorMsg = "Створено нового користувача - " + authData.getLogin();
 
         } catch (Exception e) {
