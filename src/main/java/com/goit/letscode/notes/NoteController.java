@@ -1,7 +1,6 @@
 package com.goit.letscode.notes;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +14,10 @@ public class NoteController {
     private NoteService srv;
 
     @GetMapping("/list")
-    public ModelAndView getList(Authentication authentication) {
+    public ModelAndView getList() {
 
         ModelAndView result = new ModelAndView("list");
-        result.addObject("notes",
-                            srv.listAllForUser(authentication.getName()));
+        result.addObject("notes", srv.listAllForCurrentUser());
         return result;
     }
 
@@ -52,9 +50,9 @@ public class NoteController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute NoteDTO note, Authentication authentication) {
+    public String save(@ModelAttribute NoteDTO note) {
 
-        srv.save(note, authentication.getName());
+        srv.save(note);
         return "redirect:/note/list";
     }
 

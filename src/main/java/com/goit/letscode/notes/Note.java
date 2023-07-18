@@ -27,5 +27,5 @@ public class Note {
     private AccessType accessType;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "id_user", nullable = false)
-    private User user;
+    private User owner;
 }

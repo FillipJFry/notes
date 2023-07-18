@@ -32,7 +32,7 @@ public class NoteDTO {
         note.setTitle(title);
         note.setContent(content);
         note.setAccessType(accessType);
-        note.setUser(owner);
+        note.setOwner(owner);
         return note;
     }
 }

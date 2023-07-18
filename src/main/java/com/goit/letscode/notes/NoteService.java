@@ -3,6 +3,8 @@ package com.goit.letscode.notes;
 import com.goit.letscode.notes.auth.User;
 import com.goit.letscode.notes.auth.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,19 +24,17 @@ public class NoteService {
         return new NoteDTO(createEmptyNote());
     }
 
-    public List<NoteDTO> listAllForUser(String userLogin) {
+    public List<NoteDTO> listAllForCurrentUser() {
 
-        User currentUser = userRepository.findByLogin(userLogin).orElseThrow();
-        List<Note> notes = currentUser.getNotes();
+        List<Note> notes = getCurrentUser().getNotes();
         return notes.stream()
                 .map(NoteDTO::new)
                 .collect(Collectors.toList());
     }
 
-    public void save(NoteDTO noteDTO, String userLogin) {
+    public void save(NoteDTO noteDTO) {
 
-        User currentUser = userRepository.findByLogin(userLogin).orElseThrow();
-        notesRepository.save(noteDTO.toNote(currentUser));
+        notesRepository.save(noteDTO.toNote(getCurrentUser()));
     }
 
     public void deleteById(long id) {
@@ -58,5 +58,13 @@ public class NoteService {
                 .content("")
                 .accessType(AccessType.PRIVATE)
                 .build();
+    }
+
+    private User getCurrentUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        String userLogin = authentication.getName();
+        return userRepository.findByLogin(userLogin).orElseThrow();
     }
 }
