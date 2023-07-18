@@ -1,5 +1,6 @@
 package com.goit.letscode.notes;
 
+import com.goit.letscode.notes.auth.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,13 +24,15 @@ public class NoteDTO {
         accessType = note.getAccessType();
     }
 
-    public Note toNote() {
+    public Note toNote(User owner) {
 
+        assert owner != null;
         Note note = new Note();
         note.setId(id);
         note.setTitle(title);
         note.setContent(content);
         note.setAccessType(accessType);
+        note.setOwner(owner);
         return note;
     }
 }

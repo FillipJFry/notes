@@ -87,8 +87,10 @@ public class AuthController {
         String errorMsg;
         try {
             validateAuthData(authData);
-            repository.save(new User(authData.getLogin(),
-                                    passwordEncoder.encode(authData.getPassword())));
+            repository.save(User.builder()
+                            .login(authData.getLogin())
+                            .password(passwordEncoder.encode(authData.getPassword()))
+                            .build());
             errorMsg = "Створено нового користувача - " + authData.getLogin();
 
         } catch (Exception e) {
