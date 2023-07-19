@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,10 @@ import java.util.stream.Collectors;
 public class NoteService {
 
     private static final long EMPTY_ID = -1;
+    private static final int MIN_TITLE_LEN = 5;
+    private static final int MAX_TITLE_LEN = 100;
+    private static final int MIN_CONTENT_LEN = 5;
+    private static final int MAX_CONTENT_LEN = 10000;
     @Autowired
     private NoteRepository notesRepository;
     @Autowired
@@ -32,8 +37,16 @@ public class NoteService {
                 .collect(Collectors.toList());
     }
 
-    public void save(NoteDTO noteDTO) {
+    public void save(NoteDTO noteDTO) throws InputMismatchException {
 
+        String title = noteDTO.getTitle();
+        if (title.length() < MIN_TITLE_LEN || title.length() > MAX_TITLE_LEN)
+            throw new InputMismatchException("Довжина заголовка не відповідає вимогам: від "
+                                            + MIN_TITLE_LEN + " до " + MAX_TITLE_LEN + " симв.");
+        String content = noteDTO.getContent();
+        if (content.length() < MIN_CONTENT_LEN || content.length() > MAX_CONTENT_LEN)
+            throw new InputMismatchException("Довжина тексту нотатки не відповідає вимогам: від "
+                                        + MIN_CONTENT_LEN + " до " + MAX_CONTENT_LEN + " симв.");
         notesRepository.save(noteDTO.toNote(getCurrentUser()));
     }
 
@@ -65,6 +78,7 @@ public class NoteService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assert authentication != null;
         String userLogin = authentication.getName();
-        return userRepository.findByLogin(userLogin).orElseThrow();
+        return userRepository.findByLogin(userLogin).orElseThrow(
+                () -> new RuntimeException("користувач не зареєстрований в БД: " + userLogin));
     }
 }

@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<p th:if="${editErrorMsg}" th:text="${editErrorMsg}" style="color: red;"></p>
 <form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
     <input type="hidden" field="*{id}" name="id"
               th:value="${existing_note.id}" autocomplete="off" readonly>
