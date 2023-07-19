@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/note")
 public class NoteController {
@@ -17,7 +19,12 @@ public class NoteController {
     public ModelAndView getList() {
 
         ModelAndView result = new ModelAndView("list");
-        result.addObject("notes", srv.listAllForCurrentUser());
+        List<NoteDTO> notes = srv.listAllForCurrentUser();
+        String header = "Мої нотатки";
+
+        if (!notes.isEmpty()) header += " - " + notes.size() + " шт.";
+        result.addObject("notes_header", header);
+        result.addObject("notes", notes);
         return result;
     }
 
