@@ -50,10 +50,17 @@ public class NoteController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute NoteDTO note) {
+    public ModelAndView save(@ModelAttribute NoteDTO note) {
 
-        srv.save(note);
-        return "redirect:/note/list";
+        try {
+            srv.save(note);
+        } catch (Exception e) {
+            ModelAndView result = new ModelAndView("edit");
+            result.addObject("editErrorMsg", e.getMessage());
+            result.addObject("existing_note", note);
+            return result;
+        }
+        return new ModelAndView("redirect:/note/list");
     }
 
     @PostMapping("/delete")
