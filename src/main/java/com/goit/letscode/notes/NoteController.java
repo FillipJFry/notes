@@ -22,10 +22,38 @@ public class NoteController {
     }
 
     @GetMapping("/share/{id}")
-    public ModelAndView share(@PathVariable(value = "id", required = false) Long id) {
+    public ModelAndView share(@PathVariable(value = "id", required = false) String id) {
+        ModelAndView result = new ModelAndView();
+        if (id == null || id.equals("null")) {
+            // Якщо `id` є `null` або рядком "null", перенаправляємо на сторінку з повідомленням про помилку
+            result.setViewName("share");
+            result.addObject("noteTitle", "Невірне посилання");
+            result.addObject("noteContent", "");
+            return result;
+        }
 
-        ModelAndView result = new ModelAndView("share");
-        NoteDTO note = srv.getById(id);
+        Long parsedId;
+        try {
+            parsedId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            // Обробка помилки при некоректному значенні `id`
+            result.setViewName("share");
+            result.addObject("noteTitle", "Невірне посилання");
+            result.addObject("noteContent", "");
+            return result;
+        }
+        NoteDTO note = srv.getById(parsedId);
+
+        // Перевіряємо, чи існує нотатка з таким ідентифікатором та чи є вона доступна для спільного використання
+        if (note == null || note.getAccessType() == AccessType.PRIVATE) {
+            // Якщо нотатка не знайдена або є приватною, перенаправляємо на сторінку з повідомленням про помилку
+            result.setViewName("share");
+            result.addObject("noteTitle", "Ця нотатка не існує або не може бути розшарена.");
+            result.addObject("noteContent", "");
+            return result;
+        }
+
+        result.setViewName("share");
         result.addObject("noteTitle", note.getTitle());
         result.addObject("noteContent", note.getContent());
         return result;

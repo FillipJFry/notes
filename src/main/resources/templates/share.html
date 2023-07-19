@@ -1,12 +1,14 @@
 <!doctype html>
-<html lang="uk" xmlns:th="https://www.thymeleaf.org">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Нотатка</title>
 </head>
-<h1 th:text="${noteTitle}"></h1>
-<p th:text="${noteContent}"></p>
 <body>
+<h1 th:if="${noteTitle}" th:text="${noteTitle}"></h1>
+<p th:if="${noteContent}" th:text="${noteContent}"></p>
+<h1 th:unless="${noteTitle}">Невірне посилання</h1>
+<p th:unless="${noteContent}">Ця нотатка не існує або не може бути розшарена.</p>
 </body>
 </html>
