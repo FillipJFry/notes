@@ -12,19 +12,19 @@
      Створити нотатку
     </a>
 </div>
-<table border="1" style="width: 80%;">
+<table border="1" style="width: 80%; table-layout: fixed;">
     <thead>
     <tr>
         <th style="text-align: left; width: 30%;"><b>Ім'я</b></th>
-        <th style="text-align: left; width: 50%;"><b>Вміст</b></th>
-        <th style="text-align: left; width: 12%;"><b>Доступ</b></th>
-        <th style="text-align: left; width: 8%;"><b>Дії</b></th>
+        <th style="text-align: left; width: 48%;"><b>Вміст</b></th>
+        <th style="text-align: left; width: 11%;"><b>Доступ</b></th>
+        <th style="text-align: left; width: 11%;"><b>Дії</b></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="note : ${notes}">
-        <td th:text="${note.title}"></td>
-        <td th:text="${note.content}"></td>
+        <td th:text="${note.title}" style="word-break: break-all;"></td>
+        <td th:text="${note.content}" style="word-break: break-all;"></td>
         <td th:text="${note.accessType.getTypeValue()}"></td>
         <td>
             <div style="display: flex; flex-direction: row;">

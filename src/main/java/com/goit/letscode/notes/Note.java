@@ -26,7 +26,7 @@ public class Note {
     @Column(name = "access_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private AccessType accessType;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_user", nullable = false)
     private User owner;
 }
