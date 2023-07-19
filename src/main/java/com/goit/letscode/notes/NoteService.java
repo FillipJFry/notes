@@ -50,7 +50,7 @@ public class NoteService {
         notesRepository.save(noteDTO.toNote(getCurrentUser()));
     }
 
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
 
         notesRepository.deleteById(id);
     }

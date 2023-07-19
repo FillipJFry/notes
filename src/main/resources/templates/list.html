@@ -5,10 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Список нотаток</title>
 </head>
-
 <body>
-<p><a href="/note/create">Create new</a></p>
-<table border="1">
+<div style="display: flex; flex-direction: row; margin-bottom: 20px;">
+    <span th:text="${notes_header}" style="vertical-align: middle; font-size: 16pt; margin-right: 5px;"></span>
+    <a href="/note/create" style="vertical-align: middle; padding: 5px; background-color: #199319; color: white; text-decoration: none;">
+     Створити нотатку
+    </a>
+</div>
+<table border="0">
     <thead>
     <tr>
         <th><b>Ім'я</b></th>
