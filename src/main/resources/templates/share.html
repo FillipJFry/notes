@@ -8,7 +8,5 @@
 <body>
 <h1 th:if="${noteTitle}" th:text="${noteTitle}"></h1>
 <p th:if="${noteContent}" th:text="${noteContent}"></p>
-<h1 th:unless="${noteTitle}">Невірне посилання</h1>
-<p th:unless="${noteContent}">Ця нотатка не існує або не може бути розшарена.</p>
 </body>
 </html>

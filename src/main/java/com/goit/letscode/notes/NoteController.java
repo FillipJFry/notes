@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/note")
 public class NoteController {
@@ -21,42 +23,21 @@ public class NoteController {
         return result;
     }
 
-    @GetMapping("/share/{id}")
-    public ModelAndView share(@PathVariable(value = "id", required = false) String id) {
-        ModelAndView result = new ModelAndView();
-        if (id == null || id.equals("null")) {
-            // Якщо `id` є `null` або рядком "null", перенаправляємо на сторінку з повідомленням про помилку
-            result.setViewName("share");
-            result.addObject("noteTitle", "Невірне посилання");
-            result.addObject("noteContent", "");
-            return result;
-        }
+    @GetMapping({"/share", "/share/{id}"})
+    public ModelAndView share(@PathVariable Optional<String> id) {
 
-        Long parsedId;
+        long parsedId;
         try {
-            parsedId = Long.parseLong(id);
+            parsedId = Long.parseLong(id.orElse(""));
         } catch (NumberFormatException e) {
-            // Обробка помилки при некоректному значенні `id`
-            result.setViewName("share");
-            result.addObject("noteTitle", "Невірне посилання");
-            result.addObject("noteContent", "");
-            return result;
+            return loadSharePage("Невірне посилання", "");
         }
+
         NoteDTO note = srv.getById(parsedId);
-
-        // Перевіряємо, чи існує нотатка з таким ідентифікатором та чи є вона доступна для спільного використання
         if (note == null || note.getAccessType() == AccessType.PRIVATE) {
-            // Якщо нотатка не знайдена або є приватною, перенаправляємо на сторінку з повідомленням про помилку
-            result.setViewName("share");
-            result.addObject("noteTitle", "Ця нотатка не існує або не може бути розшарена.");
-            result.addObject("noteContent", "");
-            return result;
+            return loadSharePage("Ця нотатка не існує або не може бути розшарена", "");
         }
-
-        result.setViewName("share");
-        result.addObject("noteTitle", note.getTitle());
-        result.addObject("noteContent", note.getContent());
-        return result;
+        return loadSharePage(note.getTitle(), note.getContent());
     }
 
     @GetMapping("/create")
@@ -106,6 +87,14 @@ public class NoteController {
 
         String pwdHash = encoder.encode("123");
         result.addObject("pwdHash", pwdHash);
+        return result;
+    }
+
+    private ModelAndView loadSharePage(String title, String content) {
+
+        ModelAndView result = new ModelAndView("share");
+        result.addObject("noteTitle", title);
+        result.addObject("noteContent", content);
         return result;
     }
 }
