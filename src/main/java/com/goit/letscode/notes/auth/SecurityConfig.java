@@ -36,7 +36,10 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/off")
-                .defaultSuccessUrl("/note/list", true);
+                .defaultSuccessUrl("/note/list", true)
+                .and()
+                .logout()
+                .logoutSuccessUrl("/login");
         return httpSecurity.build();
     }
 
