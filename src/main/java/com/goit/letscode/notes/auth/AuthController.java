@@ -1,6 +1,7 @@
 package com.goit.letscode.notes.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,11 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.InputMismatchException;
-
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller
@@ -37,7 +35,6 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @GetMapping("/login")
     public String gotoLogin() {
 
@@ -50,6 +47,8 @@ public class AuthController {
         String errorMsg;
         try {
             validateAuthData(authData);
+            repository.findByLogin(authData.getLogin())
+                   .orElseThrow(() -> new UsernameNotFoundException("Користувач із таким іменем не зареєстрований"));
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authData.getLogin(),
@@ -61,11 +60,9 @@ public class AuthController {
                                                         securityContext);
             return new ModelAndView("redirect:/note/list");
 
-        } catch (UsernameNotFoundException e) {
-            errorMsg = "Користувач із таким іменем не зареєстрований";
-        } catch (BadCredentialsException e) {
+        }  catch (BadCredentialsException e) {
             errorMsg = "Невірний пароль";
-        } catch (Exception e) {
+        }  catch (Exception e) {
             errorMsg = e.getMessage();
         }
 
@@ -85,8 +82,13 @@ public class AuthController {
 
         String model = "auth/login";
         String errorMsg;
+
         try {
             validateAuthData(authData);
+            repository.findByLogin(authData.getLogin())
+                    .ifPresent(user -> {
+                        throw new DuplicateKeyException("Користувач із таким іменем уже зареєстрований");
+                    });
             repository.save(User.builder()
                             .login(authData.getLogin())
                             .password(passwordEncoder.encode(authData.getPassword()))
