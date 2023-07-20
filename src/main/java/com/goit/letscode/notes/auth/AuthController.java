@@ -1,6 +1,7 @@
 package com.goit.letscode.notes.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,13 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 @Controller
@@ -51,7 +47,8 @@ public class AuthController {
         String errorMsg;
         try {
             validateAuthData(authData);
-            userLoginCheck(authData);
+            repository.findByLogin(authData.getLogin())
+                   .orElseThrow(() -> new UsernameNotFoundException("Користувач із таким іменем не зареєстрований"));
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authData.getLogin(),
@@ -87,17 +84,17 @@ public class AuthController {
         String errorMsg;
 
         try {
-
             validateAuthData(authData);
-            userRegisterCheck(authData);
+            repository.findByLogin(authData.getLogin())
+                    .ifPresent(user -> {
+                        throw new DuplicateKeyException("Користувач із таким іменем уже зареєстрований");
+                    });
             repository.save(User.builder()
                             .login(authData.getLogin())
                             .password(passwordEncoder.encode(authData.getPassword()))
                             .build());
             errorMsg = "Створено нового користувача - " + authData.getLogin();
 
-        } catch (NoSuchElementException e) {
-            errorMsg = "Користувач із таким іменем вже зареєстрований";
         } catch (Exception e) {
             errorMsg = e.getMessage();
             model = "auth/register";
@@ -124,22 +121,5 @@ public class AuthController {
             throw new InputMismatchException("Довжина паролю має бути від "
                                         + MIN_PWD_LEN + " до " + MAX_PWD_LEN + " симв.");
         }
-
-
     }
-
-    private void userLoginCheck(AuthDTO authData) {
-        Optional<User> user = repository.findByLogin(authData.getLogin());
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("Користувач із таким іменем не зареєстрований");
-        }
-    }
-
-    private void userRegisterCheck(AuthDTO authData) {
-        Optional<User> user = repository.findByLogin(authData.getLogin());
-        if (!user.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-    }
-
 }
