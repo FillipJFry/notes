@@ -1,0 +1,48 @@
+.header_row, .notes_table {
+    width: 80%;
+}
+
+.header_row {
+    display: grid;
+    grid-template-columns: 270px 200px 1fr 100px;
+    margin-bottom: 20px;
+}
+
+.notes_table {
+    table-layout: fixed;
+}
+
+.header_main_text {
+    vertical-align: middle;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.hyperlink_add_button, .hyperlink_logout_button {
+    vertical-align: middle;
+    padding: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.hyperlink_add_button {
+    background-color: #199319;
+}
+
+.hyperlink_logout_button {
+    background-color: #0000aa;
+}
+
+.note_actions_set {
+    display: flex;
+    flex-direction: row;
+}
+
+th {
+    text-align: left;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}

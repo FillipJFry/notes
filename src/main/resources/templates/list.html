@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Список нотаток</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div style="display: flex; flex-direction: row; margin-bottom: 20px;">
-    <span th:text="${notes_header}" style="vertical-align: middle; font-size: 16pt; margin-right: 5px;"></span>
-    <a href="/note/create" style="vertical-align: middle; padding: 5px; background-color: #199319; color: white; text-decoration: none;">
-     Створити нотатку
-    </a>
+<div class="header_row">
+    <div class="header_main_text" th:text="${notes_header}"></div>
+    <div><a class="hyperlink_add_button" href="/note/create">Створити нотатку</a></div>
+    <div>&nbsp;</div>
+    <div style="text-align: right"><a class="hyperlink_logout_button" href="/logout">Logout</a></div>
 </div>
-<table border="1" style="width: 80%; table-layout: fixed;">
+<table class="notes_table">
     <thead>
     <tr>
-        <th style="text-align: left; width: 30%;"><b>Ім'я</b></th>
-        <th style="text-align: left; width: 48%;"><b>Вміст</b></th>
-        <th style="text-align: left; width: 11%;"><b>Доступ</b></th>
-        <th style="text-align: left; width: 11%;"><b>Дії</b></th>
+        <th style="width: 30%;"><b>Ім'я</b></th>
+        <th style="width: 48%;"><b>Вміст</b></th>
+        <th style="width: 11%;"><b>Доступ</b></th>
+        <th style="width: 11%;"><b>Дії</b></th>
     </tr>
     </thead>
     <tbody>
@@ -26,26 +27,21 @@
         <td th:text="${note.title}" style="word-break: break-all;"></td>
         <td th:text="${note.content}" style="word-break: break-all;"></td>
         <td th:text="${note.accessType.getTypeValue()}"></td>
-        <td>
-            <div style="display: flex; flex-direction: row;">
-                <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
-                    <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
-                    <input type="image" name="submit" src="/img/trashbox.svg" alt="Delete" width="24">
-                </form>
-                <form action="#" th:action="@{/note/edit}" th:object="${noteToEdit}" method="POST">
-                    <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
-                    <input type="image" name="submit" src="/img/edit.svg" alt="Edit" width="24">
-                </form>
-                <a th:href="@{'/note/share/' + ${note.id}}">
-                    <img src="/img/link.svg" width="24" />
-                </a>
-            </div>
+        <td class="note_actions_set">
+            <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
+                <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
+                <input type="image" name="submit" src="/img/trashbox.svg" alt="Delete" width="24">
+            </form>
+            <form action="#" th:action="@{/note/edit}" th:object="${noteToEdit}" method="POST">
+                <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
+                <input type="image" name="submit" src="/img/edit.svg" alt="Edit" width="24">
+            </form>
+            <a th:href="@{'/note/share/' + ${note.id}}">
+                <img src="/img/link.svg" width="24"/>
+            </a>
         </td>
     </tr>
     </tbody>
 </table>
-<form action="/logout" method="post">
-    <input type="submit" value="Logout">
-</form>
 </body>
 </html>
