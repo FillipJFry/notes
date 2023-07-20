@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +32,7 @@ public class NoteService {
 
     public List<NoteDTO> listAllForCurrentUser() {
 
-        List<Note> notes = getCurrentUser().getNotes();
+        Set<Note> notes = getCurrentUser().getNotes();
         return notes.stream()
                 .map(NoteDTO::new)
                 .collect(Collectors.toList());
@@ -50,7 +51,7 @@ public class NoteService {
         notesRepository.save(noteDTO.toNote(getCurrentUser()));
     }
 
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
 
         notesRepository.deleteById(id);
     }

@@ -5,22 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Список нотаток</title>
 </head>
-
 <body>
-<p><a href="/note/create">Create new</a></p>
-<table border="1">
+<div style="display: flex; flex-direction: row; margin-bottom: 20px;">
+    <span th:text="${notes_header}" style="vertical-align: middle; font-size: 16pt; margin-right: 5px;"></span>
+    <a href="/note/create" style="vertical-align: middle; padding: 5px; background-color: #199319; color: white; text-decoration: none;">
+     Створити нотатку
+    </a>
+</div>
+<table border="1" style="width: 80%; table-layout: fixed;">
     <thead>
     <tr>
-        <th><b>Ім'я</b></th>
-        <th><b>Вміст</b></th>
-        <th><b>Доступ</b></th>
-        <th><b>Дії</b></th>
+        <th style="text-align: left; width: 30%;"><b>Ім'я</b></th>
+        <th style="text-align: left; width: 48%;"><b>Вміст</b></th>
+        <th style="text-align: left; width: 11%;"><b>Доступ</b></th>
+        <th style="text-align: left; width: 11%;"><b>Дії</b></th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="note : ${notes}">
-        <td th:text="${note.title}"></td>
-        <td th:text="${note.content}"></td>
+        <td th:text="${note.title}" style="word-break: break-all;"></td>
+        <td th:text="${note.content}" style="word-break: break-all;"></td>
         <td th:text="${note.accessType.getTypeValue()}"></td>
         <td>
             <div style="display: flex; flex-direction: row;">
