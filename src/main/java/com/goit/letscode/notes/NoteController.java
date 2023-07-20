@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
 import java.util.List;
 
 @Controller
@@ -28,14 +29,21 @@ public class NoteController {
         return result;
     }
 
-    @GetMapping("/share/{id}")
-    public ModelAndView share(@PathVariable(value = "id", required = false) Long id) {
+    @GetMapping({"/share", "/share/{id}"})
+    public ModelAndView share(@PathVariable Optional<String> id) {
 
-        ModelAndView result = new ModelAndView("share");
-        NoteDTO note = srv.getById(id);
-        result.addObject("noteTitle", note.getTitle());
-        result.addObject("noteContent", note.getContent());
-        return result;
+        long parsedId;
+        try {
+            parsedId = Long.parseLong(id.orElse(""));
+        } catch (NumberFormatException e) {
+            return loadSharePage("Невірне посилання", "");
+        }
+
+        NoteDTO note = srv.getById(parsedId);
+        if (note == null || note.getAccessType() == AccessType.PRIVATE) {
+            return loadSharePage("Ця нотатка не існує або не може бути розшарена", "");
+        }
+        return loadSharePage(note.getTitle(), note.getContent());
     }
 
     @GetMapping("/create")
@@ -85,6 +93,14 @@ public class NoteController {
 
         String pwdHash = encoder.encode("123");
         result.addObject("pwdHash", pwdHash);
+        return result;
+    }
+
+    private ModelAndView loadSharePage(String title, String content) {
+
+        ModelAndView result = new ModelAndView("share");
+        result.addObject("noteTitle", title);
+        result.addObject("noteContent", content);
         return result;
     }
 }
