@@ -24,8 +24,12 @@
     </thead>
     <tbody>
     <tr th:each="note : ${notes}">
-        <td th:text="${note.title}" style="word-break: break-all;"></td>
-        <td th:text="${note.content}" style="word-break: break-all;"></td>
+        <td>
+            <span th:text="${#strings.length(note.title) > 10 ? #strings.substring(note.title, 0, 10) + '...' : note.title}" style="word-break: break-all;"></span>
+        </td>
+        <td>
+            <span th:text="${#strings.length(note.content) > 20 ? #strings.substring(note.content, 0, 20) + '...' : note.content}" style="word-break: break-all;"></span>
+        </td>
         <td th:text="${note.accessType.getTypeValue()}"></td>
         <td class="note_actions_set">
             <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
