@@ -1,6 +1,6 @@
-package com.goit.letscode.notes.auth;
+package com.goit.letscode.notes.auth.data;
 
-import com.goit.letscode.notes.Note;
+import com.goit.letscode.notes.data.Note;
 import lombok.*;
 
 import javax.persistence.*;

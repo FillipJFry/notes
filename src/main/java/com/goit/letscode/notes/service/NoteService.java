@@ -1,26 +1,23 @@
-package com.goit.letscode.notes;
+package com.goit.letscode.notes.service;
 
-import com.goit.letscode.notes.auth.User;
-import com.goit.letscode.notes.auth.UserRepository;
+import com.goit.letscode.notes.auth.data.User;
+import com.goit.letscode.notes.auth.data.UserRepository;
+import com.goit.letscode.notes.data.AccessType;
+import com.goit.letscode.notes.data.Note;
+import com.goit.letscode.notes.data.NoteRepository;
+import static com.goit.letscode.notes.data.Constraints.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class NoteService {
 
     private static final long EMPTY_ID = -1;
-    private static final int MIN_TITLE_LEN = 5;
-    private static final int MAX_TITLE_LEN = 100;
-    private static final int MIN_CONTENT_LEN = 5;
-    private static final int MAX_CONTENT_LEN = 10000;
     @Autowired
     private NoteRepository notesRepository;
     @Autowired

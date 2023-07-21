@@ -1,4 +1,4 @@
-package com.goit.letscode.notes;
+package com.goit.letscode.notes.data;
 
 import lombok.Getter;
 

@@ -1,5 +1,8 @@
 package com.goit.letscode.notes.auth;
 
+import com.goit.letscode.notes.auth.data.User;
+import com.goit.letscode.notes.auth.data.UserRepository;
+import static com.goit.letscode.notes.auth.data.Constraints.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,10 +27,6 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 @RequestMapping("/")
 public class AuthController {
 
-    private static final int MIN_LOGIN_LEN = 4;
-    private static final int MAX_LOGIN_LEN = 50;
-    private static final int MIN_PWD_LEN = 3;
-    private static final int MAX_PWD_LEN = 100;
     @Autowired
     private AuthenticationManager authManager;
     @Autowired
