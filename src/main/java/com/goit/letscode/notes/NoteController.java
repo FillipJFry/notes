@@ -8,11 +8,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/note")
 public class NoteController {
 
+    private static final int MAX_VISIBLE_TITLE_LEN = 50;
+    private static final int MAX_VISIBLE_CONTENT_LEN = 200;
     @Autowired
     private NoteService srv;
 
@@ -20,7 +23,15 @@ public class NoteController {
     public ModelAndView getList() {
 
         ModelAndView result = new ModelAndView("list");
-        List<NoteDTO> notes = srv.listAllForCurrentUser();
+        List<NoteDTO> notes = srv.listAllForCurrentUser()
+                .peek(note -> {
+                    String title = note.getTitle();
+                    String content = note.getContent();
+                    note.setTitle(title.length() <= MAX_VISIBLE_TITLE_LEN ? title :
+                                           title.substring(0, MAX_VISIBLE_TITLE_LEN) + "...");
+                    note.setContent(content.length() <= MAX_VISIBLE_CONTENT_LEN ? content :
+                                           content.substring(0, MAX_VISIBLE_CONTENT_LEN) + "...");
+                }).collect(Collectors.toList());
         String header = "Мої нотатки";
 
         if (!notes.isEmpty()) header += " - " + notes.size() + " шт.";
