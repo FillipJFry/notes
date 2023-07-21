@@ -1,8 +1,8 @@
-package com.goit.letscode.notes;
+package com.goit.letscode.notes.data;
 
 import javax.persistence.*;
 
-import com.goit.letscode.notes.auth.User;
+import com.goit.letscode.notes.auth.data.User;
 import lombok.*;
 
 @Entity

@@ -1,6 +1,8 @@
-package com.goit.letscode.notes;
+package com.goit.letscode.notes.service;
 
-import com.goit.letscode.notes.auth.User;
+import com.goit.letscode.notes.auth.data.User;
+import com.goit.letscode.notes.data.AccessType;
+import com.goit.letscode.notes.data.Note;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
