@@ -47,14 +47,14 @@ public class NoteController {
         try {
             parsedId = Long.parseLong(id.orElse(""));
         } catch (NumberFormatException e) {
-            return loadSharePage("Невірне посилання", "");
+            return loadSharePage("Невірне посилання", "", "");
         }
 
         NoteDTO note = srv.getById(parsedId);
         if (note == null || note.getAccessType() == AccessType.PRIVATE) {
-            return loadSharePage("Ця нотатка не існує або не може бути розшарена", "");
+            return loadSharePage("Ця нотатка не існує або не може бути розшарена", "", "");
         }
-        return loadSharePage(note.getTitle(), note.getContent());
+        return loadSharePage(null, note.getTitle(), note.getContent());
     }
 
     @GetMapping("/create")
@@ -111,9 +111,10 @@ public class NoteController {
         return result;
     }
 
-    private ModelAndView loadSharePage(String title, String content) {
+    private ModelAndView loadSharePage(String errorMsg, String title, String content) {
 
         ModelAndView result = new ModelAndView("share");
+        result.addObject("errorMsg", errorMsg);
         result.addObject("noteTitle", title);
         result.addObject("noteContent", content);
         return result;

@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title th:text="${page_title}">Default Title</title>
+    <title th:text="${page_title}">Edit a note</title>
+    <link rel="stylesheet" href="/css/basic.css" />
+    <link rel="stylesheet" href="/css/messages.css" />
 </head>
-
 <body>
-<h1 th:text="${header}">Default Header</h1>
-<p th:if="${editErrorMsg}" th:text="${editErrorMsg}" style="color: red;"></p>
+<p th:text="${header}" class="header_main_text">Edit a note</p>
+<p th:if="${editErrorMsg}" th:text="${editErrorMsg}" class="error_msg"></p>
 <form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
     <input type="hidden" field="*{id}" name="id"
               th:value="${existing_note.id}" autocomplete="off" readonly>
-    <div>Ім'я:</div>
-    <div><input type="text" field="*{title}" name="title"
-              th:value="${existing_note.title}" autocomplete="off"></div>
-    <div><textarea style="width: 80%; height: 250px;" maxlength="10000" rows="8" field="*{content}" name="content" autocomplete="off"
-                 th:text="${existing_note.content}"></textarea></div>
+    <p>Ім'я:</p>
+    <p><input type="text" field="*{title}" name="title"
+              th:value="${existing_note.title}" autocomplete="off"></p>
+    <p><textarea style="width: 80%; height: 40%;" maxlength="10000" rows="8" field="*{content}" name="content" autocomplete="off"
+                 th:text="${existing_note.content}"></textarea></p>
     <div th:each="accessTypeItem : ${T(com.goit.letscode.notes.AccessType).values()}">
-        <div style="display: flex; flex-direction: row;">
+        <div class="note_access">
             <input type="radio" field="*{accessType}" name="accessType" th:value="${accessTypeItem}"
                    th:checked="${existing_note.accessType} == ${accessTypeItem}"></p>
             <label th:for="${#ids.next('accessType')}"
                    th:text="${accessTypeItem.getTypeValue()}">model</label>
         </div>
     </div>
-    <div><input type="submit" value="Зберегти"></div>
+    <p><input type="submit" value="Зберегти"></p>
 </form>
-<div><a href="/note/list">Скасувати</a></div>
+<p><a href="/note/list">Скасувати</a></p>
 </body>
 </html>

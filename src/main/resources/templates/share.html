@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Нотатка</title>
+    <link rel="stylesheet" href="/css/messages.css" />
 </head>
 <body>
-<h1 th:if="${noteTitle}" th:text="${noteTitle}"></h1>
+<p th:if="${errorMsg}" th:text="${errorMsg}" class="error_msg"></p>
+<p th:if="${noteTitle}" th:text="${noteTitle}" class="header_main_text"></p>
 <p th:if="${noteContent}" th:text="${noteContent}"></p>
 </body>
 </html>

@@ -8,12 +8,6 @@
     margin-bottom: 20px;
 }
 
-.header_main_text {
-    vertical-align: middle;
-    font-size: 16pt;
-    font-weight: bold;
-}
-
 .hyperlink_add_button, .hyperlink_logout_button {
     vertical-align: middle;
     padding: 5px;
@@ -42,7 +36,7 @@ table, th, td {
     border-collapse: collapse;
 }
 
-.note_actions_set {
+.note_actions_set, .note_access {
     vertical-align: middle;
     display: flex;
     flex-direction: row;

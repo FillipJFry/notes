@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Вхід</title>
+    <link rel="stylesheet" href="/css/messages.css" />
 </head>
-
 <body>
-<h1>Вхід</h1>
-<p th:if="${regErrorMsg}" th:text="${regErrorMsg}" style="color: red;"></p>
+<p class="header_main_text">Вхід</p>
+<p th:if="${regErrorMsg}" th:text="${regErrorMsg}" class="error_msg"></p>
 <form method="POST" action="/login">
     <p><label for="login">Логін</label></p>
     <p><input id="login" type="text" name="login" placeholder="Ваш логін"></p>
