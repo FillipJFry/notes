@@ -63,6 +63,8 @@ public class NoteController {
         ModelAndView result = new ModelAndView("edit");
         NoteDTO note = srv.create();
         result.addObject("existing_note", note);
+        result.addObject("pageTitle","Створення нотатки");
+        result.addObject("header","Створення нотатки");
         return result;
     }
 
@@ -72,6 +74,8 @@ public class NoteController {
         ModelAndView result = new ModelAndView("edit");
         note = srv.getById(note.getId());
         result.addObject("existing_note", note);
+        result.addObject("pageTitle","Редагування нотатки");
+        result.addObject("header","Редагування нотатки");
         return result;
     }
 

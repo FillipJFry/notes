@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Edit a note</title>
+    <title th:text="${pageTitle}">Default Title</title>
 </head>
 
 <body>
+<h1 th:text="${header}">Default Header</h1>
 <p th:if="${editErrorMsg}" th:text="${editErrorMsg}" style="color: red;"></p>
 <form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
     <input type="hidden" field="*{id}" name="id"
@@ -15,8 +16,8 @@
     <p><input type="text" field="*{title}" name="title"
               th:value="${existing_note.title}" autocomplete="off"></p>
     <p>Content:</p>
-    <p><input type="text" field="*{content}" name="content"
-              th:value="${existing_note.content}" autocomplete="off"></p>
+    <p><textarea maxlength="10000" rows="20" field="*{content}" name="content" autocomplete="off"
+                 th:text="${existing_note.content}"></textarea></p>
     <p>Access type:</p>
     <p>
     <div th:each="accessTypeItem : ${T(com.goit.letscode.notes.AccessType).values()}">
