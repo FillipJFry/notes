@@ -1,15 +1,11 @@
 .header_row, .notes_table {
-    width: 80%;
+    width: 100%;
 }
 
 .header_row {
     display: grid;
     grid-template-columns: 270px 200px 1fr 100px;
     margin-bottom: 20px;
-}
-
-.notes_table {
-    table-layout: fixed;
 }
 
 .header_main_text {
@@ -33,9 +29,8 @@
     background-color: #0000aa;
 }
 
-.note_actions_set {
-    display: flex;
-    flex-direction: row;
+.note_multiline_text {
+    word-break: break-all;
 }
 
 th {
@@ -45,4 +40,10 @@ th {
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
+}
+
+.note_actions_set {
+    vertical-align: middle;
+    display: flex;
+    flex-direction: row;
 }

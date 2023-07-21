@@ -24,25 +24,23 @@
     </thead>
     <tbody>
     <tr th:each="note : ${notes}">
-        <td>
-            <span th:text="${#strings.length(note.title) > 10 ? #strings.substring(note.title, 0, 10) + '...' : note.title}" style="word-break: break-all;"></span>
-        </td>
-        <td>
-            <span th:text="${#strings.length(note.content) > 20 ? #strings.substring(note.content, 0, 20) + '...' : note.content}" style="word-break: break-all;"></span>
-        </td>
+        <td th:text="${note.title}" class="note_multiline_text"></td>
+        <td th:text="${note.content}" class="note_multiline_text"></td>
         <td th:text="${note.accessType.getTypeValue()}"></td>
-        <td class="note_actions_set">
-            <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
-                <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
-                <input type="image" name="submit" src="/img/trashbox.svg" alt="Delete" width="24">
-            </form>
-            <form action="#" th:action="@{/note/edit}" th:object="${noteToEdit}" method="POST">
-                <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
-                <input type="image" name="submit" src="/img/edit.svg" alt="Edit" width="24">
-            </form>
-            <a th:href="@{'/note/share/' + ${note.id}}">
-                <img src="/img/link.svg" width="24"/>
-            </a>
+        <td>
+            <div class="note_actions_set">
+                <form action="#" th:action="@{/note/delete}" th:object="${noteToDel}" method="POST">
+                    <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
+                    <input type="image" name="submit" src="/img/trashbox.svg" alt="Delete" width="24">
+                </form>
+                <form action="#" th:action="@{/note/edit}" th:object="${noteToEdit}" method="POST">
+                    <input type="hidden" field="*{id}" name="id" th:value="${note.id}">
+                    <input type="image" name="submit" src="/img/edit.svg" alt="Edit" width="24">
+                </form>
+                <a th:href="@{'/note/share/' + ${note.id}}">
+                    <img src="/img/link.svg" width="24"/>
+                </a>
+            </div>
         </td>
     </tr>
     </tbody>

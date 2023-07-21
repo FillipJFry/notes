@@ -11,6 +11,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class NoteService {
@@ -30,12 +31,10 @@ public class NoteService {
         return new NoteDTO(createEmptyNote());
     }
 
-    public List<NoteDTO> listAllForCurrentUser() {
+    public Stream<NoteDTO> listAllForCurrentUser() {
 
         Set<Note> notes = getCurrentUser().getNotes();
-        return notes.stream()
-                .map(NoteDTO::new)
-                .collect(Collectors.toList());
+        return notes.stream().map(NoteDTO::new);
     }
 
     public void save(NoteDTO noteDTO) throws InputMismatchException {
