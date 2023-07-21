@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Edit a note</title>
+    <title th:text="${page_title}">Default Title</title>
 </head>
 
 <body>
+<h1 th:text="${header}">Default Header</h1>
 <p th:if="${editErrorMsg}" th:text="${editErrorMsg}" style="color: red;"></p>
 <form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
     <input type="hidden" field="*{id}" name="id"
               th:value="${existing_note.id}" autocomplete="off" readonly>
-    <p>Title:</p>
-    <p><input type="text" field="*{title}" name="title"
-              th:value="${existing_note.title}" autocomplete="off"></p>
-    <p>Content:</p>
-    <p><input type="text" field="*{content}" name="content"
-              th:value="${existing_note.content}" autocomplete="off"></p>
-    <p>Access type:</p>
-    <p>
+    <div>Ім'я:</div>
+    <div><input type="text" field="*{title}" name="title"
+              th:value="${existing_note.title}" autocomplete="off"></div>
+    <div><textarea style="width: 80%; height: 250px;" maxlength="10000" rows="8" field="*{content}" name="content" autocomplete="off"
+                 th:text="${existing_note.content}"></textarea></div>
     <div th:each="accessTypeItem : ${T(com.goit.letscode.notes.AccessType).values()}">
         <div style="display: flex; flex-direction: row;">
             <input type="radio" field="*{accessType}" name="accessType" th:value="${accessTypeItem}"
@@ -27,8 +25,8 @@
                    th:text="${accessTypeItem.getTypeValue()}">model</label>
         </div>
     </div>
-    <p><input type="submit" value="Зберегти"></p>
+    <div><input type="submit" value="Зберегти"></div>
 </form>
-<p><a href="/note/list">Скасувати</a></p>
+<div><a href="/note/list">Скасувати</a></div>
 </body>
 </html>
