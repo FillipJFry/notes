@@ -10,9 +10,8 @@
 <body>
 <p th:text="${header}" class="header_main_text">Edit a note</p>
 <p th:if="${editErrorMsg}" th:text="${editErrorMsg}" class="error_msg"></p>
-<form action="#" th:action="@{/note/save}" th:object="${note}" method="POST">
-    <input type="hidden" field="*{id}" name="id"
-              th:value="${existing_note.id}" autocomplete="off" readonly>
+<form action="#" th:action="@{/note/save}" th:object="${dto}" method="POST">
+    <input type="hidden" field="*{id}" name="id" th:value="${existing_note.id}" readonly>
     <p>Ім'я:</p>
     <p><input type="text" field="*{title}" name="title"
               th:value="${existing_note.title}" autocomplete="off"></p>
@@ -26,6 +25,7 @@
                    th:text="${accessTypeItem.getTypeValue()}">model</label>
         </div>
     </div>
+    <input type="hidden" field="*{pageTitle}" name="pageTitle" th:value="${page_title}" readonly>
     <p><input type="submit" value="Зберегти"></p>
 </form>
 <p><a href="/note/list">Скасувати</a></p>
