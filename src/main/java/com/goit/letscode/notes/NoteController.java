@@ -82,14 +82,16 @@ public class NoteController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute NoteDTO note) {
+    public ModelAndView save(@ModelAttribute DTOWithTitle dto) {
 
         try {
-            srv.save(note);
+            srv.save(dto);
         } catch (Exception e) {
             ModelAndView result = new ModelAndView("edit");
+            result.addObject("page_title", dto.getPageTitle());
+            result.addObject("header", dto.getPageTitle());
             result.addObject("editErrorMsg", e.getMessage());
-            result.addObject("existing_note", note);
+            result.addObject("existing_note", dto);
             return result;
         }
         return new ModelAndView("redirect:/note/list");
@@ -107,7 +109,6 @@ public class NoteController {
     public ModelAndView showPwdHash(BCryptPasswordEncoder encoder) {
 
         ModelAndView result = new ModelAndView("hash");
-
         String pwdHash = encoder.encode("123");
         result.addObject("pwdHash", pwdHash);
         return result;
