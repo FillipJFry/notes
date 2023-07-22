@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Список нотаток</title>
-    <link rel="stylesheet" href="/css/basic.css" />
-    <link rel="stylesheet" href="/css/messages.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
 <div class="header_row">
     <div class="header_main_text" th:text="${notes_header}"></div>
-    <div><a class="hyperlink_add_button" href="/note/create">Створити нотатку</a></div>
+    <div><a class="add_button" href="/note/create">Створити нотатку</a></div>
     <div>&nbsp;</div>
-    <div style="text-align: right"><a class="hyperlink_logout_button" href="/logout">Logout</a></div>
+    <div style="text-align: right"><a class="logout_button" href="/logout">Logout</a></div>
 </div>
 <table class="notes_table">
     <thead>
