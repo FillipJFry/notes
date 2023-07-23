@@ -1,3 +1,7 @@
+.error_msg {
+    color: red;
+}
+
 .header_row, .notes_table {
     width: 100%;
 }
@@ -8,27 +12,41 @@
     margin-bottom: 20px;
 }
 
-.hyperlink_add_button, .hyperlink_logout_button {
+.header_main_text {
+    vertical-align: middle;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.add_button, .logout_button, .register_button, .cancel_button, .submit_button {
     vertical-align: middle;
     padding: 5px;
     color: white;
     text-decoration: none;
 }
 
-.hyperlink_add_button {
+.add_button, .register_button {
     background-color: #199319;
 }
 
-.hyperlink_logout_button {
+.logout_button, .cancel_button {
     background-color: #0000aa;
+}
+
+.submit_button {
+    background-color: #888888;
+    border: none;
+    font-size: 12pt;
 }
 
 .note_multiline_text {
     word-break: break-all;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
-th {
-    text-align: left;
+.note_content {
+    width: 80%;
 }
 
 table, th, td {
@@ -36,7 +54,11 @@ table, th, td {
     border-collapse: collapse;
 }
 
-.note_actions_set, .note_access {
+th {
+    text-align: left;
+}
+
+.note_actions_set, .note_access, .note_name_textbox {
     vertical-align: middle;
     display: flex;
     flex-direction: row;
