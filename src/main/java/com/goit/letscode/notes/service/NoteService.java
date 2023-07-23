@@ -31,7 +31,9 @@ public class NoteService {
     public Stream<NoteDTO> listAllForCurrentUser() {
 
         Set<Note> notes = getCurrentUser().getNotes();
-        return notes.stream().map(NoteDTO::new);
+        return notes.stream()
+                .sorted((l, r) -> (int)(r.getId() - l.getId()))
+                .map(NoteDTO::new);
     }
 
     public void save(NoteDTO noteDTO) throws InputMismatchException {

@@ -4,7 +4,6 @@ import com.goit.letscode.notes.data.AccessType;
 import com.goit.letscode.notes.service.NoteDTO;
 import com.goit.letscode.notes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -103,15 +102,6 @@ public class NoteController {
         assert noteToDel != null;
         srv.deleteById(noteToDel.getId());
         return "redirect:/note/list";
-    }
-
-    @GetMapping("/pwd")
-    public ModelAndView showPwdHash(BCryptPasswordEncoder encoder) {
-
-        ModelAndView result = new ModelAndView("hash");
-        String pwdHash = encoder.encode("123");
-        result.addObject("pwdHash", pwdHash);
-        return result;
     }
 
     private ModelAndView loadSharePage(String errorMsg, String title, String content) {

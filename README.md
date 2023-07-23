@@ -5,6 +5,7 @@ Main features:
 - simple and easy-to-understand design
 - cross-platform
 - launches on the port 9999
+- default user: 'user', password: '123'
 
 The app is parametrized by the environment vars:
 - DB_SERVER - a name or IP-address of the PostgreSQL server, with stores the app data
@@ -13,7 +14,7 @@ The app is parametrized by the environment vars:
 - DB_USERNAME and DB_PASSWORD - credentials to gain access to the database
 
 Possible command to start the app:
-java -jar notes.jar --spring.profiles.active=prod
+java -jar notes-1.0.jar --spring.profiles.active=prod
 
 Technologies used:
 - Java 11
